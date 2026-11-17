@@ -1,0 +1,1390 @@
+<!DOCTYPE html><!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎄 SnowCode — новогодние сайты и баннеры</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0d0a1f; --panel:rgba(255,255,255,.06); --line:rgba(255,255,255,.12);
+  --txt:#f0f0ff; --muted:#a79fc9;
+  --red:#ff5c7c; --green:#7ef0c2; --gold:#ffd685;
+  --violet:#b06bff;
+}
+html{scroll-behavior:smooth}
+body{
+  background:radial-gradient(1200px 800px at 70% -10%, #2e1a5e 0%, #140b30 55%, var(--bg) 100%);
+  color:var(--txt); font-family:'Segoe UI',system-ui,sans-serif;
+  min-height:100vh; overflow-x:hidden;
+}
+#scene{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+#scene .stars{
+  position:absolute;inset:0;
+  background-image:
+    radial-gradient(2px 2px at 10% 15%,#fff 50%,transparent 51%),
+    radial-gradient(2px 2px at 30% 8%,#fff 50%,transparent 51%),
+    radial-gradient(1.5px 1.5px at 55% 20%,#fff 50%,transparent 51%),
+    radial-gradient(2px 2px at 75% 10%,#fff 50%,transparent 51%),
+    radial-gradient(1.5px 1.5px at 88% 22%,#fff 50%,transparent 51%),
+    radial-gradient(2px 2px at 45% 5%,#fff 50%,transparent 51%);
+  opacity:.7;
+}
+#scene .moon{
+  position:absolute;top:7%;right:12%;width:90px;height:90px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#fffbe8,#e8ddc0 60%,#cfc3a4);
+  box-shadow:0 0 60px rgba(255,246,210,.45),0 0 140px rgba(255,246,210,.2);
+}
+#scene .mountains{
+  position:absolute;left:0;right:0;bottom:0;height:46vh;
+  background:
+    repeating-linear-gradient(105deg,transparent 0 180px,rgba(38,28,80,.55) 180px 360px),
+    repeating-linear-gradient(75deg,transparent 0 220px,rgba(30,22,66,.7) 220px 440px);
+  mask-image:linear-gradient(180deg,transparent 0%,#000 35%,#000 100%);
+  -webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 35%,#000 100%);
+}
+#scene .forest{
+  position:absolute;left:0;right:0;bottom:0;height:30vh;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='200' viewBox='0 0 140 200'%3E%3Cpath d='M70 0 L110 70 L92 70 L128 140 L12 140 L48 70 L30 70 Z' fill='%23152a4a'/%3E%3Crect x='64' y='140' width='12' height='24' fill='%230d1830'/%3E%3C/svg%3E");
+  background-repeat:repeat-x;background-position:bottom;
+  opacity:.55;
+}
+#scene .snowdrift{
+  position:absolute;left:0;right:0;bottom:0;height:11vh;
+  background:radial-gradient(60% 100% at 20% 100%, rgba(235,245,255,.16), transparent 70%),
+             radial-gradient(50% 100% at 65% 100%, rgba(235,245,255,.12), transparent 70%),
+             linear-gradient(180deg,transparent,rgba(225,238,255,.10));
+}
+#steve{
+  position:fixed;bottom:9vh;left:-140px;width:96px;height:150px;
+  z-index:1;pointer-events:none;user-select:none;
+  will-change:transform;
+}
+#steve svg{width:100%;height:100%;overflow:visible}
+#steve.flip{transform:scaleX(-1)}
+#steve .arm-back,#steve .arm-front{transform-origin:90px 78px}
+#steve .leg-back,#steve .leg-front{transform-origin:90px 108px}
+#steve .head{transform-origin:90px 62px}
+#steve .pick{transform-origin:60px 60px}
+#snow{position:fixed;inset:0;z-index:1;pointer-events:none}
+.wrap{max-width:1100px;margin:0 auto;padding:0 18px;position:relative;z-index:2}
+
+#loader{position:fixed;inset:0;z-index:100;background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;
+  transition:opacity .8s ease, visibility .8s}
+#loader.hide{opacity:0;visibility:hidden;filter:blur(8px)}
+.loader-flake{font-size:64px;animation:spin 2.4s linear infinite;filter:drop-shadow(0 0 18px var(--violet))}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-bar{width:min(320px,70vw);height:6px;border-radius:6px;background:rgba(255,255,255,.1);overflow:hidden}
+.loader-bar i{display:block;height:100%;width:0;border-radius:6px;background:linear-gradient(90deg,var(--violet),var(--gold),var(--red));animation:fill 1.7s ease forwards}
+@keyframes fill{to{width:100%}}
+.loader-txt{color:var(--muted);letter-spacing:.2em;text-transform:uppercase;font-size:12px}
+
+#authScreen{position:fixed;inset:0;z-index:99;background:var(--bg);
+  display:none;align-items:center;justify-content:center;padding:18px;
+  transition:opacity .7s ease, visibility .7s, filter .7s}
+#authScreen.show{display:flex}
+#authScreen.hide{opacity:0;visibility:hidden;filter:blur(10px)}
+.auth-box{width:min(420px,100%);background:#1a1238;border:1px solid var(--line);border-radius:26px;padding:34px 28px;
+  animation:popIn .5s cubic-bezier(.2,1.4,.4,1);position:relative;z-index:2}
+.auth-flake{font-size:48px;text-align:center;filter:drop-shadow(0 0 16px var(--violet));animation:spin 6s linear infinite}
+.auth-box h2{text-align:center;margin:10px 0 4px}
+.auth-box .sub{text-align:center;color:var(--muted);font-size:14px;margin-bottom:22px}
+.auth-tabs{display:flex;gap:8px;margin-bottom:20px}
+.auth-tab{flex:1;padding:11px;border-radius:12px;border:1px solid var(--line);background:var(--panel);
+  color:var(--muted);font:inherit;font-weight:700;font-size:14px;cursor:pointer;transition:.25s}
+.auth-tab.on{color:#1a0b12;background:linear-gradient(135deg,var(--gold),var(--red));border-color:transparent}
+.auth-box input{width:100%;padding:13px 15px;margin-bottom:12px;border-radius:12px;border:1px solid var(--line);
+  background:rgba(255,255,255,.07);color:var(--txt);font:inherit;outline:none;transition:.25s}
+.auth-box input:focus{border-color:var(--violet);box-shadow:0 0 0 3px rgba(176,107,255,.18)}
+.auth-btn{width:100%;margin-top:4px}
+.auth-err{color:var(--red);font-size:13px;min-height:18px;margin:2px 0 8px;text-align:center}
+.auth-hint{color:var(--muted);font-size:12px;text-align:center;margin-top:14px}
+
+header{position:fixed;top:0;left:0;right:0;z-index:50;
+  background:rgba(13,10,31,.75);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);transition:transform .45s ease}
+header.hidden{transform:translateY(-110%)}
+.header-in{max-width:1100px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.logo{font-weight:800;font-size:20px;white-space:nowrap}
+.logo span{color:var(--violet)}
+nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+.navlink{background:none;border:0;color:var(--muted);font:inherit;font-size:15px;cursor:pointer;
+  padding:8px 14px;border-radius:12px;transition:.25s;position:relative}
+.navlink:hover{color:var(--txt);background:rgba(255,255,255,.08)}
+.navlink.active{color:var(--txt);background:linear-gradient(135deg,rgba(176,107,255,.3),rgba(126,240,194,.2))}
+.badge-hit,.badge-new,.badge-beta{position:absolute;right:-8px;top:-8px;
+  font-size:9px;font-weight:800;letter-spacing:.06em;border-radius:6px;padding:2px 6px;box-shadow:0 2px 6px rgba(0,0,0,.4)}
+.badge-hit{background:linear-gradient(135deg,var(--gold),var(--red));color:#1a0b12}
+.badge-new{background:var(--green);color:#1a0b12}
+.badge-beta{background:var(--violet);color:#fff;text-transform:uppercase}
+.icon-btn{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);
+  background:var(--panel);color:var(--txt);font-size:18px;cursor:pointer;transition:.25s;flex:0 0 auto}
+.icon-btn:hover{background:rgba(255,255,255,.14);transform:translateY(-2px)}
+#burger{display:none}
+#collapseBtn{font-size:14px;width:auto;padding:0 12px}
+#userChip{display:none;align-items:center;gap:8px;padding:7px 14px;border-radius:12px;
+  border:1px solid var(--line);background:var(--panel);font-size:14px;font-weight:700;white-space:nowrap}
+#userChip .ava{font-size:18px}
+#logoutBtn{background:none;border:0;color:var(--muted);font:inherit;font-size:14px;cursor:pointer;padding:0}
+#logoutBtn:hover{color:var(--red)}
+#headerRestore{position:fixed;top:14px;right:14px;z-index:49;width:46px;height:46px;border-radius:50%;
+  border:1px solid var(--line);background:rgba(13,10,31,.9);color:#fff;font-size:20px;cursor:pointer;
+  opacity:0;pointer-events:none;transform:scale(.6);transition:.35s}
+#headerRestore.show{opacity:1;pointer-events:auto;transform:scale(1)}
+
+main{padding-top:86px;perspective:1200px;position:relative;z-index:2}
+.page{display:none}
+.page.active{display:block}
+.page.exit{animation:exit8d .45s ease forwards}
+.page.enter{animation:enter8d .6s ease}
+@keyframes exit8d{to{opacity:0;transform:rotateY(-14deg) scale(.94) translateZ(-120px);filter:blur(8px)}}
+@keyframes enter8d{from{opacity:0;transform:rotateY(10deg) scale(1.06) translateZ(160px);filter:blur(10px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes popIn{from{opacity:0;transform:translateY(30px) scale(.9)}to{opacity:1;transform:none}}
+
+h1{font-size:clamp(30px,5vw,50px);line-height:1.15}
+h2{font-size:clamp(24px,3.6vw,36px);margin-bottom:8px}
+.grad{background:linear-gradient(90deg,var(--red),var(--gold),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+.muted{color:var(--muted)}
+section{padding:56px 0}
+
+.btn{display:inline-block;border:0;cursor:pointer;font:inherit;font-weight:700;font-size:16px;
+  padding:14px 28px;border-radius:16px;color:#1a0b12;text-decoration:none;
+  background:linear-gradient(135deg,var(--gold),var(--red));
+  box-shadow:0 10px 30px rgba(255,92,124,.35);transition:.25s}
+.btn:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 14px 40px rgba(255,92,124,.5)}
+.btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line);box-shadow:none}
+.btn.review{background:transparent;color:var(--gold);border:1px solid var(--gold);box-shadow:none}
+.btn.review:hover{background:rgba(255,214,133,.12)}
+.btn.small{padding:10px 18px;font-size:14px;border-radius:12px}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:70px 0 40px}
+.hero p{color:var(--muted);margin:16px 0 26px;font-size:17px;max-width:480px}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap}
+#welcomeLine{display:none;color:var(--green);font-weight:700;margin-bottom:10px}
+.ornament{aspect-ratio:1;max-width:380px;margin:0 auto;border-radius:50%;position:relative;
+  background:radial-gradient(circle at 35% 30%, rgba(176,107,255,.3), rgba(255,92,124,.12) 45%, transparent 70%);
+  display:flex;align-items:center;justify-content:center;font-size:120px;
+  animation:float 5s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-16px) rotate(4deg)}}
+
+.carousel{overflow:hidden;border-radius:22px;border:1px solid var(--line)}
+.slides{display:flex;transition:transform .8s ease}
+.slide{flex:0 0 100%;min-height:210px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;font-size:clamp(22px,4vw,34px);font-weight:800;text-align:center;padding:30px}
+.slide small{font-weight:400;color:rgba(255,255,255,.85);font-size:15px}
+.slide.s1{background:linear-gradient(135deg,#2a1b5e,#7a3bd8)}
+.slide.s2{background:linear-gradient(135deg,#5e1a2a,#d82a6b)}
+.slide .big{font-size:52px}
+.dots{display:flex;gap:8px;justify-content:center;padding:12px}
+.dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.25);cursor:pointer;transition:.3s}
+.dot.on{background:var(--gold);transform:scale(1.3)}
+
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:28px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:26px;
+  display:flex;flex-direction:column;gap:12px;position:relative;transition:.35s}
+.card:hover{transform:translateY(-6px);border-color:rgba(176,107,255,.6);box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.card h3{font-size:22px}
+.card .desc{color:var(--muted);font-size:14.5px;line-height:1.55;flex:1}
+.price{font-size:26px;font-weight:800}
+.old{color:var(--muted);text-decoration:line-through;font-size:15px;font-weight:400;margin-right:8px}
+.badge{position:absolute;top:-12px;right:18px;padding:5px 14px;border-radius:20px;font-size:14px;font-weight:800;letter-spacing:.06em;transition:.3s}
+.card:hover .badge{transform:scale(1.2) rotate(-6deg)}
+.badge.hit{background:linear-gradient(135deg,var(--gold),var(--red));color:#1a0b12}
+.badge.bog{background:linear-gradient(135deg,#b06bff,#5c7cff);color:#fff}
+.badge.free{background:linear-gradient(135deg,var(--green),#0f5d2e);color:#fff}
+.card-btns{display:flex;gap:10px;flex-wrap:wrap}
+.free-price{color:var(--green)}
+
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:26px}
+.about-card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:26px}
+.about-card .ic{font-size:36px;margin-bottom:10px}
+.about-card h3{margin-bottom:8px}
+.about-card p{color:var(--muted);font-size:14.5px;line-height:1.6}
+.maks-card{margin-top:28px;background:linear-gradient(135deg,rgba(176,107,255,.18),rgba(255,92,124,.12));
+  border:1px solid rgba(176,107,255,.55);border-radius:24px;padding:30px;
+  display:flex;align-items:center;gap:24px;flex-wrap:wrap;position:relative;transition:.35s}
+.maks-card:hover{transform:translateY(-4px);box-shadow:0 24px 60px rgba(176,107,255,.25)}
+.maks-card h3{font-size:26px}
+.maks-card .desc{color:var(--muted);font-size:14.5px;line-height:1.6;max-width:520px}
+.max-logo-link{display:inline-block;width:72px;height:72px;border-radius:50%;transition:.3s;flex:0 0 auto;line-height:0}
+.max-logo-link:hover{transform:scale(1.12) rotate(-4deg)}
+.max-logo-link svg{width:100%;height:100%;display:block}
+
+.bn-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:28px;align-items:start}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:24px}
+.panel label{display:block;font-size:13px;color:var(--muted);margin:14px 0 6px;letter-spacing:.04em}
+.panel label:first-child{margin-top:0}
+.panel input,.panel select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);
+  background:rgba(255,255,255,.07);color:var(--txt);font:inherit;outline:none;transition:.25s}
+.panel input:focus,.panel select:focus{border-color:var(--violet);box-shadow:0 0 0 3px rgba(176,107,255,.18)}
+.panel select option{background:#1a1238;color:var(--txt)}
+.panel input[type=file]{padding:9px 12px;font-size:13px;cursor:pointer}
+.panel input[type=file]::file-selector-button{border:0;border-radius:9px;padding:7px 14px;margin-right:10px;cursor:pointer;
+  background:linear-gradient(135deg,var(--gold),var(--red));color:#1a0b12;font-weight:700;font:inherit;font-size:13px}
+.color-row{display:flex;gap:10px;align-items:center;margin-top:8px}
+.color-row input[type=color]{width:52px;height:40px;padding:4px;border-radius:10px;border:1px solid var(--line);
+  background:rgba(255,255,255,.07);cursor:pointer}
+.color-row span{font-size:13px;color:var(--muted)}
+.check-row{display:flex;align-items:center;gap:10px;margin:14px 0 4px}
+.check-row input{width:20px;height:20px;accent-color:var(--gold);cursor:pointer}
+.check-row label{margin:0;font-size:13px;color:var(--muted);letter-spacing:.04em;cursor:pointer}
+.hint-locked{font-size:12px;color:var(--muted);margin-top:2px}
+
+.banner-prev{min-height:230px;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:26px;gap:8px;transition:.4s ease;overflow:visible;position:relative;margin-top:30px}
+.banner-prev h3{font-size:clamp(20px,3vw,32px);text-shadow:0 2px 12px rgba(0,0,0,.4)}
+.banner-prev p{font-size:15px;opacity:.9;max-width:80%}
+.banner-prev .deco{position:absolute;font-size:56px;line-height:1;z-index:3;
+  filter:drop-shadow(0 8px 18px rgba(0,0,0,.55));
+  transition:top .35s ease,left .35s ease,right .35s ease,bottom .35s ease,scale .35s ease,rotate .35s ease}
+.banner-prev:hover .deco{rotate:-8deg}
+.banner-prev .deco img.deco-img{width:88px;height:88px;object-fit:cover;border-radius:16px;display:block;
+  border:3px solid rgba(255,255,255,.4);box-shadow:0 10px 24px rgba(0,0,0,.5)}
+
+.deco.pos-tl{top:-14px;left:10px}
+.deco.pos-tc{top:-40px;left:0;right:0;margin:0 auto;width:max-content}
+.deco.pos-tr{top:-14px;right:10px}
+.deco.pos-bl{bottom:-10px;left:10px}
+.deco.pos-bc{bottom:-38px;left:0;right:0;margin:0 auto;width:max-content}
+.deco.pos-br{bottom:-10px;right:10px}
+.deco.pos-tl.inside{top:14px;left:14px}
+.deco.pos-tc.inside{top:14px}
+.deco.pos-tr.inside{top:14px;right:14px}
+.deco.pos-bl.inside{bottom:14px;left:14px}
+.deco.pos-bc.inside{bottom:14px}
+.deco.pos-br.inside{bottom:14px;right:14px}
+
+.banner-prev.style-3d{transform:perspective(900px) rotateX(6deg) rotateY(-8deg);box-shadow:14px 18px 40px rgba(0,0,0,.5),0 0 24px rgba(126,240,194,.25)}
+.banner-prev.style-3d .deco{scale:1.4}
+.banner-prev.style-8d{transform:perspective(900px) rotateX(8deg) rotateY(-10deg) scale(1.02);
+  animation:glow8d 2.4s ease-in-out infinite}
+.banner-prev.style-8d .deco{scale:1.6}
+@keyframes glow8d{0%,100%{box-shadow:12px 16px 40px rgba(0,0,0,.5),0 0 30px rgba(255,92,124,.55)}
+  50%{box-shadow:12px 16px 40px rgba(0,0,0,.5),0 0 65px rgba(176,107,255,.75)}}
+.banner-prev.style-16d{transform:perspective(1100px) rotateX(10deg) rotateY(-14deg) scale(1.05);
+  animation:glow16d 1.8s ease-in-out infinite}
+.banner-prev.style-16d .deco{scale:2;animation:decoFloat 3s ease-in-out infinite}
+@keyframes glow16d{0%,100%{box-shadow:14px 20px 50px rgba(0,0,0,.55),0 0 40px rgba(176,107,255,.6),0 0 80px rgba(255,92,124,.35)}
+  50%{box-shadow:14px 20px 50px rgba(0,0,0,.55),0 0 90px rgba(176,107,255,.9),0 0 120px rgba(126,240,194,.55)}}
+@keyframes decoFloat{0%,100%{translate:0 0}50%{translate:0 -12px}}
+
+.grad-text{background:linear-gradient(90deg,var(--red),var(--gold),var(--green),var(--violet),var(--red));
+  background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:shimmer 3s linear infinite;text-shadow:none !important}
+@keyframes shimmer{to{background-position:300% 0}}
+
+.bn-price{font-size:22px;font-weight:800;margin-top:16px}
+.bn-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+
+.beta-tag{display:inline-block;vertical-align:middle;margin-left:10px;
+  font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  padding:4px 12px;border-radius:20px;background:var(--violet);color:#fff;
+  box-shadow:0 0 18px rgba(176,107,255,.6);animation:betaPulse 2s ease-in-out infinite}
+@keyframes betaPulse{0%,100%{box-shadow:0 0 10px rgba(176,107,255,.5)}50%{box-shadow:0 0 26px rgba(176,107,255,.95)}}
+.site-prev{min-height:280px;border-radius:18px;overflow:hidden;display:flex;flex-direction:column;transition:.4s ease;
+  margin-top:30px;border:1px solid var(--line)}
+.site-prev .sp-head{padding:22px;text-align:center}
+.site-prev .sp-head h3{font-size:24px;margin-bottom:6px}
+.site-prev .sp-head p{font-size:13px;opacity:.85}
+.site-prev .sp-body{flex:1;padding:20px;background:rgba(0,0,0,.25)}
+.site-prev .sp-block{border-radius:12px;padding:12px 14px;margin-bottom:10px;background:rgba(255,255,255,.1);font-size:13px}
+.site-prev .sp-btn{display:inline-block;margin-top:6px;padding:9px 20px;border-radius:10px;font-size:13px;font-weight:700;color:#1a0b12}
+.site-price{font-size:22px;font-weight:800;margin-top:16px}
+
+.review{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px 20px;margin-top:14px;
+  animation:reviewIn .5s ease}
+@keyframes reviewIn{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
+.review .stars{color:var(--gold);letter-spacing:2px}
+.review .who{font-weight:700;margin-top:6px}
+.review .txt{color:var(--muted);font-size:14.5px;margin-top:4px}
+
+.modal{position:fixed;inset:0;z-index:90;display:none;align-items:center;justify-content:center;padding:18px;
+  background:rgba(5,3,15,.7);backdrop-filter:blur(10px)}
+.modal.open{display:flex;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-box{width:min(460px,100%);background:#1a1238;border:1px solid var(--line);border-radius:24px;padding:28px;
+  animation:popIn .45s cubic-bezier(.2,1.4,.4,1);max-height:90vh;overflow-y:auto}
+.modal-box h3{margin-bottom:6px}
+.modal-box .sub{color:var(--muted);font-size:14px;margin-bottom:18px}
+.modal-box input,.modal-box textarea,.modal-box select{width:100%;padding:12px 14px;margin-bottom:12px;border-radius:12px;
+  border:1px solid var(--line);background:rgba(255,255,255,.07);color:var(--txt);font:inherit;outline:none;resize:vertical;transition:.25s}
+.modal-box input:focus,.modal-box textarea:focus{border-color:var(--violet)}
+.pick{display:flex;gap:6px;font-size:28px;cursor:pointer;margin-bottom:14px;user-select:none}
+.pick span{opacity:.25;transition:.2s;transform:scale(.9)}
+.pick span.on{opacity:1;transform:scale(1.15);filter:drop-shadow(0 0 8px var(--gold))}
+.modal-close{float:right;background:none;border:0;color:var(--muted);font-size:22px;cursor:pointer}
+.modal-close:hover{color:var(--txt)}
+.thanks{text-align:center;font-size:60px}
+.as-user{font-size:14px;color:var(--green);font-weight:700;margin-bottom:12px}
+
+.flake-fly{position:fixed;z-index:95;pointer-events:none;font-size:20px;animation:fly 1.2s ease-out forwards}
+@keyframes fly{to{transform:translate(var(--dx),var(--dy)) scale(0) rotate(220deg);opacity:0}}
+
+footer{padding:34px 0 44px;color:var(--muted);font-size:13px;text-align:center;position:relative;z-index:2}
+
+@media(max-width:860px){
+  .hero{grid-template-columns:1fr;padding-top:40px}
+  .svc-grid{grid-template-columns:1fr}
+  .bn-grid,.about-grid{grid-template-columns:1fr}
+}
+@media(max-width:760px){
+  #burger{display:block}
+  nav{position:absolute;top:100%;left:0;right:0;flex-direction:column;padding:10px 14px 16px;
+    background:rgba(13,10,31,.97);border-bottom:1px solid var(--line);
+    transform:translateY(-8px);opacity:0;pointer-events:none;transition:.35s}
+  nav.open{transform:none;opacity:1;pointer-events:auto}
+  .navlink{width:100%;text-align:left;font-size:17px;padding:13px 14px}
+  main{padding-top:76px}
+  .header-in{padding:10px 14px}
+  .logo{font-size:17px}
+  section{padding:40px 0}
+  #userChip{font-size:12px;padding:6px 10px}
+  .banner-prev .deco{font-size:46px}
+  .maks-card{flex-direction:column;text-align:center}
+  #steve{width:64px;height:100px;bottom:8vh}
+}
+</style>
+</head>
+<body>
+
+<div id="scene">
+  <div class="stars"></div>
+  <div class="moon"></div>
+  <div class="mountains"></div>
+  <div class="forest"></div>
+  <div class="snowdrift"></div>
+</div>
+
+<svg id="steve" viewBox="0 0 180 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <g transform="scale(0.9 0.9)">
+    <g class="leg-back">
+      <rect x="80" y="106" width="16" height="36" fill="#39309e"/>
+      <rect x="80" y="140" width="16" height="8" fill="#4a4a4a"/>
+    </g>
+    <g class="arm-back">
+      <rect x="66" y="72" width="14" height="34" fill="#0d8f88"/>
+      <rect x="66" y="104" width="14" height="10" fill="#a9744a"/>
+      <g class="pick">
+        <rect x="50" y="28" width="6" height="34" fill="#5c4020" transform="rotate(18 53 45)"/>
+        <path d="M36 22 L70 14 L72 24 L40 32 Z" fill="#18b0a8"/>
+        <path d="M32 26 L40 20 L42 28 L34 34 Z" fill="#40e0d0"/>
+      </g>
+    </g>
+    <g class="leg-front">
+      <rect x="98" y="106" width="16" height="36" fill="#4438c8"/>
+      <rect x="98" y="140" width="16" height="8" fill="#5a5a5a"/>
+    </g>
+    <rect x="80" y="66" width="32" height="42" fill="#14a89f"/>
+    <g class="arm-front">
+      <rect x="110" y="72" width="14" height="34" fill="#18b0a8"/>
+      <rect x="110" y="104" width="14" height="10" fill="#b5855a"/>
+    </g>
+    <g class="head">
+      <rect x="78" y="26" width="36" height="36" fill="#b5855a"/>
+      <rect x="78" y="26" width="36" height="12" fill="#3a2a18"/>
+      <g class="eyes">
+        <rect x="83" y="42" width="6" height="6" fill="#ffffff"/>
+        <rect x="84.5" y="42" width="3" height="6" fill="#3a4ff0"/>
+        <rect x="103" y="42" width="6" height="6" fill="#ffffff"/>
+        <rect x="104.5" y="42" width="3" height="6" fill="#3a4ff0"/>
+      </g>
+      <rect x="92" y="50" width="8" height="3" fill="#5c3a22"/>
+      <rect x="88" y="54" width="16" height="4" fill="#6b4226"/>
+    </g>
+  </g>
+</svg>
+
+<canvas id="snow"></canvas>
+
+<div id="loader">
+  <div class="loader-flake">❄️</div>
+  <div class="loader-bar"><i></i></div>
+  <div class="loader-txt">Загружаем волшебство…</div>
+</div>
+
+<div id="authScreen">
+  <div class="auth-box">
+    <div class="auth-flake">❄️</div>
+    <h2>Snow<span class="grad">Code</span></h2>
+    <p class="sub">Войди или зарегистрируйся — и заходи в зимнюю студию</p>
+    <div class="auth-tabs">
+      <button class="auth-tab on" id="tabLogin">Вход</button>
+      <button class="auth-tab" id="tabRegister">Регистрация</button>
+    </div>
+    <form id="loginForm" autocomplete="off">
+      <input id="loginName" placeholder="Имя" maxlength="30">
+      <input id="loginPass" type="password" placeholder="Пароль">
+      <div class="auth-err" id="loginErr"></div>
+      <button type="submit" class="btn auth-btn">Войти 🔓</button>
+    </form>
+    <form id="regForm" style="display:none" autocomplete="off">
+      <input id="regName" placeholder="Придумай имя" maxlength="30">
+      <input id="regPass" type="password" placeholder="Придумай пароль (от 4 символов)">
+      <input id="regPass2" type="password" placeholder="Повтори пароль">
+      <div class="auth-err" id="regErr"></div>
+      <button type="submit" class="btn auth-btn">Зарегистрироваться 🎁</button>
+    </form>
+    <p class="auth-hint">Данные хранятся только в этом браузере 🔒</p>
+  </div>
+</div>
+
+<header id="header">
+  <div class="header-in">
+    <div class="logo">❄️ Snow<span>Code</span></div>
+    <nav id="nav">
+      <button class="navlink active" data-page="home">Главная</button>
+      <button class="navlink" data-page="services">Услуги<span class="badge-hit">ХИТ</span></button>
+      <button class="navlink" data-page="banners">Баннеры<span class="badge-new">НОВОЕ</span></button>
+      <button class="navlink" data-page="builder">Конструктор сайта<span class="badge-beta">BETA</span></button>
+      <button class="navlink" data-page="about">О нас</button>
+    </nav>
+    <div id="userChip"><span class="ava">🎅</span><span id="userNameTxt"></span><button id="logoutBtn" title="Выйти">✕</button></div>
+    <button class="icon-btn" id="soundBtn" title="Музыка вкл/выкл">🔊</button>
+    <button class="icon-btn" id="burger" title="Меню">☰</button>
+    <button class="icon-btn" id="collapseBtn" title="Свернуть шапку">⌃</button>
+  </div>
+</header>
+<button id="headerRestore" title="Вернуть шапку">🎄</button>
+
+<main>
+  <section class="page active" id="page-home">
+    <div class="wrap">
+      <div class="hero">
+        <div>
+          <h1>Создаём <span class="grad">новогоднее</span> волшебство в интернете</h1>
+          <div id="welcomeLine"></div>
+          <p>Сайты, баннеры и цифровые подарки под ёлку. Быстро, красиво и с новогодним настроением ❄️</p>
+          <div class="hero-btns">
+            <button class="btn" data-go="services">🎁 Выбрать услугу</button>
+            <button class="btn ghost" data-go="builder">🛠️ Конструктор сайта</button>
+          </div>
+        </div>
+        <div class="ornament">🎄</div>
+      </div>
+      <section>
+        <h2>Наши работы</h2>
+        <p class="muted">Листай — это то, что мы умеем</p>
+        <div class="carousel" style="margin-top:18px">
+          <div class="slides" id="slides">
+            <div class="slide s1"><div class="big">🌐</div>СОЗДАНИЕ САЙТОВ<small>Современные, быстрые и красивые сайты под ключ</small></div>
+            <div class="slide s2"><div class="big">🖼️</div>СОЗДАНИЕ БАННЕРОВ<small>Свои фото как фон и предмет — 3D, 8D и 16D</small></div>
+            <div class="slide" style="background:linear-gradient(135deg,#1a3a2e,#2ab86a)"><div class="big">✨</div>ДИЗАЙН И ВОЛШЕБСТВО<small>Анимации, эффекты и праздничное настроение</small></div>
+          </div>
+          <div class="dots" id="dots"></div>
+        </div>
+      </section>
+      <section>
+        <h2>Отзывы наших клиентов</h2>
+        <p class="muted">Нажми на любую услугу на странице «Услуги», чтобы оставить свой отзыв ⭐</p>
+        <div id="reviewList"></div>
+      </section>
+    </div>
+  </section>
+
+  <section class="page" id="page-services">
+    <div class="wrap">
+      <section>
+        <h2>Наши <span class="grad">услуги</span></h2>
+        <p class="muted">Выбирай тариф — жми «Купить» или оставь отзыв</p>
+        <div class="svc-grid">
+          <div class="card">
+            <div class="badge free">🆓</div>
+            <h3>🌱 Базовый</h3>
+            <div class="desc">Одностраничный сайт-визитка, адаптив под телефон, базовый дизайн, анимации и запуск за 2 дня.</div>
+            <div class="price free-price">Бесплатно</div>
+            <div class="card-btns">
+              <button class="btn small" data-buy="Базовый" data-price="0 ₽">Купить</button>
+              <button class="btn small review" data-review="Базовый">Оставить отзыв</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="badge hit">💎</div>
+            <h3>⭐ Premium</h3>
+            <div class="desc">Многостраничный сайт, уникальный дизайн, анимации, форма заявок, SEO-база и помощь с публикацией.</div>
+            <div class="price"><span class="old">10 000 ₽</span>5 000 ₽</div>
+            <div class="card-btns">
+              <button class="btn small" data-buy="Premium" data-price="5 000 ₽">Купить</button>
+              <button class="btn small review" data-review="Premium">Оставить отзыв</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="badge bog">😇</div>
+            <h3>👑 BOG</h3>
+            <div class="desc">Самый идеальный сайт: премиум-дизайн, 3D- и 16D-эффекты, музыка, анимированный фон — всё под ключ с потолком качества.</div>
+            <div class="price"><span class="old">25 000 ₽</span>23 000 ₽</div>
+            <div class="card-btns">
+              <button class="btn small" data-buy="BOG" data-price="23 000 ₽">Купить</button>
+              <button class="btn small review" data-review="BOG">Оставить отзыв</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <section class="page" id="page-banners">
+    <div class="wrap">
+      <section>
+        <h2>Конструктор <span class="grad">баннеров</span></h2>
+        <p class="muted">Бесплатный баннер можно сразу скачать в PNG. Платные — через заказ ✨</p>
+        <div class="bn-grid">
+          <div class="panel">
+            <label>Заголовок баннера</label>
+            <input id="bTitle" value="С Новым годом!" maxlength="40">
+            <label>Подзаголовок</label>
+            <input id="bSub" value="Скидки до 50% на все услуги" maxlength="60">
+            <label>Фон</label>
+            <select id="bBg">
+              <option value="linear-gradient(135deg,#2a1b5e,#7a3bd8)">Фиолетовая ночь</option>
+              <option value="linear-gradient(135deg,#7a1230,#d8452a)">Красный новогодний</option>
+              <option value="linear-gradient(135deg,#0d3b1e,#1f8f4e)">Зелёная ель</option>
+              <option value="linear-gradient(135deg,#123a7a,#2a6bd8)">Синий зимний</option>
+              <option value="linear-gradient(135deg,#5e3a12,#d89a2a)">Золотой праздник</option>
+              <option value="custom">Свой цвет 🎨</option>
+            </select>
+            <div class="color-row" id="colorRow" style="display:none">
+              <input type="color" id="bC1" value="#2a1b5e">
+              <span>+</span>
+              <input type="color" id="bC2" value="#7a3bd8">
+              <span>— градиент из двух цветов</span>
+            </div>
+            <label>Своё фото на фон 🌄 (необязательно)</label>
+            <input type="file" id="bPhotoBg" accept="image/*">
+            <button class="btn small ghost" id="bPhotoBgClear" type="button" style="margin-top:8px">Убрать фото фона</button>
+            <label>Своё фото как предмет 🖼️ (необязательно)</label>
+            <input type="file" id="bPhotoItem" accept="image/*">
+            <button class="btn small ghost" id="bPhotoItemClear" type="button" style="margin-top:8px">Убрать фото предмета</button>
+            <label>Картинка (эмодзи, если нет своего фото)</label>
+            <select id="bImg">
+              <option value="🎄">🎄 Ёлка</option>
+              <option value="🎁">🎁 Подарок</option>
+              <option value="⛏️">⛏️ Кирка</option>
+              <option value="❄️">❄️ Снежинка</option>
+              <option value="⭐">⭐ Звезда</option>
+              <option value="🎅">🎅 Дед Мороз</option>
+            </select>
+            <label>Позиция предмета</label>
+            <select id="bPos">
+              <option value="pos-tl">Вверху слева ↖</option>
+              <option value="pos-tc" selected>Вверху по центру ↑</option>
+              <option value="pos-tr">Вверху справа ↗</option>
+              <option value="pos-bl">Внизу слева ↙</option>
+              <option value="pos-bc">Внизу по центру ↓</option>
+              <option value="pos-br">Внизу справа ↘</option>
+            </select>
+            <div class="hint-locked">Выход за границы работает на 3D, 8D и 16D. На обычном — предмет внутри, и его можно сразу скачать.</div>
+            <label>Стиль и цена</label>
+            <select id="bStyle">
+              <option value="classic">Обычный — бесплатно (скачать PNG)</option>
+              <option value="style-3d">3D баннер — 2 000 ₽</option>
+              <option value="style-8d">8D баннер — 4 000 ₽</option>
+              <option value="style-16d">16D баннер — 6 000 ₽</option>
+            </select>
+            <div class="check-row">
+              <input type="checkbox" id="bGrad">
+              <label for="bGrad">Переливающийся текст ✨</label>
+            </div>
+            <div class="hint-locked" id="gradHint">Доступно только для 8D и 16D баннеров</div>
+            <div class="bn-row">
+              <div class="bn-price" id="bPrice">Цена: 0 ₽</div>
+              <button class="btn small" id="bBuy">Купить баннер</button>
+              <button class="btn small" id="bDownload">⬇ Скачать PNG</button>
+            </div>
+          </div>
+          <div>
+            <div class="banner-prev" id="bannerPrev">
+              <div class="deco pos-tc">🎄</div>
+              <h3>С Новым годом!</h3>
+              <p>Скидки до 50% на все услуги</p>
+            </div>
+            <p class="muted" style="margin-top:12px;font-size:13px">👆 Живой предпросмотр. «Скачать PNG» работает для бесплатного стиля.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <section class="page" id="page-builder">
+    <div class="wrap">
+      <section>
+        <h2>Конструктор сайта <span class="beta-tag">BETA</span></h2>
+        <p class="muted">Собери свой сайт за минуту: назови его, выбери шаблон и цвет — а мы сделаем остальное 🛠️</p>
+        <div class="bn-grid">
+          <div class="panel">
+            <label>Название сайта</label>
+            <input id="sName" value="Мой первый сайт" maxlength="40">
+            <label>Тип сайта</label>
+            <select id="sType">
+              <option value="Визитка">Визитка — 2 000 ₽</option>
+              <option value="Портфолио">Портфолио — 3 000 ₽</option>
+              <option value="Интернет-магазин">Интернет-магазин — 5 000 ₽</option>
+            </select>
+            <label>Цветовая тема</label>
+            <select id="sTheme">
+              <option value="linear-gradient(135deg,#2a1b5e,#7a3bd8)|#b06bff">Фиолетовая ночь</option>
+              <option value="linear-gradient(135deg,#7a1230,#d8452a)|#ff5c7c">Красная новогодняя</option>
+              <option value="linear-gradient(135deg,#0d3b1e,#1f8f4e)|#7ef0c2">Зелёная ель</option>
+              <option value="linear-gradient(135deg,#123a7a,#2a6bd8)|#7fb2ff">Ледяная синева</option>
+            </select>
+            <label>Слоган сайта</label>
+            <input id="sSlogan" value="Добро пожаловать!" maxlength="60">
+            <div class="bn-row">
+              <div class="site-price" id="sPrice">Цена: 2 000 ₽</div>
+              <button class="btn small" id="sBuy">Купить сайт</button>
+            </div>
+            <div class="hint-locked" style="margin-top:10px">🧪 Раздел в бета-тесте: функции могут меняться.</div>
+          </div>
+          <div>
+            <div class="site-prev" id="sitePrev">
+              <div class="sp-head">
+                <h3 id="spName">Мой первый сайт</h3>
+                <p id="spSlogan">Добро пожаловать!</p>
+              </div>
+              <div class="sp-body">
+                <div class="sp-block">📄 О нас — короткий рассказ о тебе или твоём деле</div>
+                <div class="sp-block">🖼️ Галерея — работы и фотографии</div>
+                <div class="sp-block">📞 Контакты — как с тобой связаться</div>
+                <span class="sp-btn" id="spBtn">Написать нам ✉️</span>
+              </div>
+            </div>
+            <p class="muted" style="margin-top:12px;font-size:13px">👆 Живой предпросмотр будущего сайта</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <section class="page" id="page-about">
+    <div class="wrap">
+      <section>
+        <h2>О <span class="grad">нас</span></h2>
+        <p class="muted">Небольшая студия с большой любовью к деталям</p>
+        <div class="about-grid">
+          <div class="about-card"><div class="ic">🎯</div><h3>Кто мы</h3><p>SnowCode — студия цифрового волшебства. Делаем сайты и баннеры, которые не стыдно показать друзьям.</p></div>
+          <div class="about-card"><div class="ic">⚡</div><h3>Почему быстро</h3><p>Базовый сайт — за 2 дня, Premium — за неделю, BOG — до двух недель.</p></div>
+          <div class="about-card"><div class="ic">💎</div><h3>Качество</h3><p>Каждый проект проходит проверку на телефоне и компьютере. Анимации плавные, снег падает вовремя.</p></div>
+          <div class="about-card"><div class="ic">🤝</div><h3>Поддержка</h3><p>После сдачи проекта мы на связи месяц: мелкие правки бесплатно, советы — всегда.</p></div>
+        </div>
+        <div class="maks-card">
+          <a class="max-logo-link" href="https://max.ru/join/VFHv-mK15Vi3TdLxWwHBNEkDQEtd0zegvAueA7G6bhQ" target="_blank" rel="noopener" title="Канал МАКС">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-label="Макс">
+              <defs>
+                <linearGradient id="maxGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#3d6bf5"/>
+                  <stop offset="55%" stop-color="#5b4be0"/>
+                  <stop offset="100%" stop-color="#a34de0"/>
+                </linearGradient>
+              </defs>
+              <circle cx="50" cy="50" r="48" fill="url(#maxGrad)"/>
+              <path fill="#ffffff" d="M50 26c-13.5 0-24 10-24 23.5 0 6.5 2.3 11.5 5.5 15.6 2 2.5 1 6-1.8 7.6-2.6 1.5-1.6 5.3 1.4 5.6 9.5 1 19.5.6 26.5-3.2C69 71.5 74 63.5 74 49.5 74 36 63.5 26 50 26z"/>
+              <circle cx="52" cy="49" r="11" fill="url(#maxGrad)"/>
+            </svg>
+          </a>
+          <div style="flex:1;min-width:240px">
+            <h3>МАКС</h3>
+            <div class="desc">Наш канал в мессенджере МАКС: новости студии, скидки и полезные материалы 👋</div>
+            <div class="card-btns" style="margin-top:12px">
+              <a class="btn small" href="https://max.ru/join/VFHv-mK15Vi3TdLxWwHBNEkDQEtd0zegvAueA7G6bhQ" target="_blank" rel="noopener">Перейти на канал МАКС</a>
+              <button class="btn small review" data-review="МАКС">Оставить отзыв</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+</main>
+
+<footer>❄️ SnowCode © 2026 — сделано с новогодним настроением ❄️</footer>
+
+<div class="modal" id="buyModal">
+  <div class="modal-box">
+    <button class="modal-close" data-close>✕</button>
+    <h3>Оформление заказа 🎁</h3>
+    <p class="sub" id="buyInfo"></p>
+    <div id="nickBlock">
+      <input id="buyName" placeholder="Твой ник" maxlength="30">
+    </div>
+    <div class="as-user" id="asUserBlock" style="display:none">✅ Заказ от: <span id="buyAsName"></span></div>
+    <input id="buyContact" placeholder="Номер телефона или Telegram (необязательно)">
+    <textarea id="buyComment" rows="2" placeholder="Комментарий (необязательно)"></textarea>
+    <button class="btn" id="buySubmit" style="width:100%">Заказать ✉️</button>
+  </div>
+</div>
+
+<div class="modal" id="reviewModal">
+  <div class="modal-box">
+    <button class="modal-close" data-close>✕</button>
+    <h3>Оставить отзыв ⭐</h3>
+    <p class="sub" id="reviewFor"></p>
+    <div class="pick" id="stars"><span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span></div>
+    <input id="revName" placeholder="Твой ник">
+    <textarea id="revText" rows="3" placeholder="Что понравилось?"></textarea>
+    <button class="btn" id="revSubmit" style="width:100%">Отправить отзыв</button>
+  </div>
+</div>
+
+<div class="modal" id="thanksModal">
+  <div class="modal-box" style="text-align:center">
+    <div class="thanks">❄️</div>
+    <h3>Готово!</h3>
+    <p class="sub" id="thanksTxt"></p>
+    <button class="btn" data-close>Отлично 🎄</button>
+  </div>
+</div>
+
+<script>
+/* ============ TELEGRAM — вставь свои данные ============ */
+const TG_TOKEN='ВСТАВЬ_ТОКЕН';
+const TG_CHAT='ВСТАВЬ_CHAT_ID';
+async function sendToTelegram(text){
+  if(TG_TOKEN.startsWith('ВСТАВЬ')||TG_CHAT.startsWith('ВСТАВЬ')) return false;
+  try{
+    const r=await fetch('https://api.telegram.org/bot'+TG_TOKEN+'/sendMessage',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({chat_id:TG_CHAT,text:text})});
+    return r.ok;
+  }catch(e){ return false; }
+}
+
+/* ============ ХРАНИЛИЩЕ ============ */
+const store={
+  get(k,f){ try{ return JSON.parse(localStorage.getItem(k)||f); }catch(e){ return f==='{}'?{}:[]; } },
+  set(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} },
+  getRaw(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } },
+  setRaw(k,v){ try{ localStorage.setItem(k,v); }catch(e){} },
+  remove(k){ try{ localStorage.removeItem(k); }catch(e){} }
+};
+
+/* ============ АВТОРИЗАЦИЯ ============ */
+const authScreen=document.getElementById('authScreen');
+const tabLogin=document.getElementById('tabLogin'), tabRegister=document.getElementById('tabRegister');
+const loginForm=document.getElementById('loginForm'), regForm=document.getElementById('regForm');
+function currentUser(){ return store.getRaw('sc_current'); }
+function isRegistered(){ const c=currentUser(); return !!(c && store.get('sc_users','{}')[c]); }
+function enterSite(name){
+  store.setRaw('sc_current',name);
+  authScreen.classList.add('hide');
+  setTimeout(function(){ authScreen.classList.remove('show','hide'); },750);
+  showUser(name); fireworks();
+}
+function showUser(name){
+  document.getElementById('userChip').style.display='flex';
+  document.getElementById('userNameTxt').textContent=name;
+  const w=document.getElementById('welcomeLine');
+  w.style.display='block';
+  w.textContent='🎉 Привет, '+name+'! Рады видеть тебя снова';
+  document.getElementById('revName').value=name;
+}
+function logout(){
+  store.remove('sc_current');
+  document.getElementById('userChip').style.display='none';
+  document.getElementById('welcomeLine').style.display='none';
+  document.getElementById('revName').value='';
+  openAuth();
+}
+function openAuth(){
+  authScreen.classList.add('show');
+  switchTab('login');
+  document.getElementById('loginErr').textContent='';
+  document.getElementById('regErr').textContent='';
+}
+function switchTab(tab){
+  tabLogin.classList.toggle('on',tab==='login');
+  tabRegister.classList.toggle('on',tab==='register');
+  loginForm.style.display=tab==='login'?'block':'none';
+  regForm.style.display=tab==='register'?'block':'none';
+}
+tabLogin.addEventListener('click',function(){ switchTab('login'); });
+tabRegister.addEventListener('click',function(){ switchTab('register'); });
+regForm.addEventListener('submit',function(e){
+  e.preventDefault();
+  const name=document.getElementById('regName').value.trim();
+  const p1=document.getElementById('regPass').value;
+  const p2=document.getElementById('regPass2').value;
+  const err=document.getElementById('regErr');
+  if(!name){ err.textContent='Введи имя 🙂'; return; }
+  if(p1.length<4){ err.textContent='Пароль — минимум 4 символа'; return; }
+  if(p1!==p2){ err.textContent='Пароли не совпадают'; return; }
+  const u=store.get('sc_users','{}');
+  if(u[name]){ err.textContent='Такое имя уже занято, придумай другое'; return; }
+  u[name]=p1; store.set('sc_users',u);
+  enterSite(name);
+});
+loginForm.addEventListener('submit',function(e){
+  e.preventDefault();
+  const name=document.getElementById('loginName').value.trim();
+  const pass=document.getElementById('loginPass').value;
+  const err=document.getElementById('loginErr');
+  const u=store.get('sc_users','{}');
+  if(!u[name]){ err.textContent='Такого пользователя нет — зарегистрируйся'; return; }
+  if(u[name]!==pass){ err.textContent='Неверный пароль'; return; }
+  enterSite(name);
+});
+document.getElementById('logoutBtn').addEventListener('click',logout);
+
+/* ============ МУЗЫКА: тёплая зимняя мелодия (Am–F–C–G) ============ */
+let ac=null, master=null, musicGain=null, musicOn=true, audioReady=false, nextLoop=0;
+function initAudio(){
+  if(audioReady) return;
+  ac=new (window.AudioContext||window.webkitAudioContext)();
+  master=ac.createGain(); master.gain.value=.9; master.connect(ac.destination);
+  musicGain=ac.createGain(); musicGain.gain.value=musicOn?0.15:0; musicGain.connect(master);
+  audioReady=true; nextLoop=ac.currentTime+0.2;
+}
+function tone(freq,t,dur,vol,type,dest){
+  if(!ac) return;
+  const o=ac.createOscillator(), g=ac.createGain();
+  o.type=type||'sine'; o.frequency.value=freq;
+  g.gain.setValueAtTime(0,t);
+  g.gain.linearRampToValueAtTime(vol,t+0.04);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g); g.connect(dest||musicGain);
+  o.start(t); o.stop(t+dur+0.1);
+}
+const N={A2:110,C3:130.81,D3:146.83,E3:164.81,F3:174.61,G3:196,A3:220,B3:246.94,
+  C4:261.63,D4:293.66,E4:329.63,F4:349.23,G4:392,A4:440,B4:493.88,
+  C5:523.25,D5:587.33,E5:659.26,G5:783.99,A5:880,C6:1046.5,E6:1318.5};
+const EIGHTH=0.5, LOOP=32*EIGHTH;
+const arp=[
+  [0,'A3'],[1,'C4'],[2,'E4'],[3,'A4'],[4,'E4'],[5,'C4'],[6,'E4'],[7,'A4'],
+  [8,'F3'],[9,'A3'],[10,'C4'],[11,'F4'],[12,'C4'],[13,'A3'],[14,'C4'],[15,'F4'],
+  [16,'C4'],[17,'E4'],[18,'G4'],[19,'C5'],[20,'G4'],[21,'E4'],[22,'G4'],[23,'C5'],
+  [24,'G3'],[25,'B3'],[26,'D4'],[27,'G4'],[28,'D4'],[29,'B3'],[30,'D4'],[31,'G4']
+];
+const bass=[[0,'A2',6],[8,'F3',6],[16,'C3',6],[24,'G3',6]];
+const bells=[[4,'E5',1],[12,'A5',1],[20,'E5',1],[28,'D5',1]];
+function scheduleLoop(start){
+  arp.forEach(function(n){
+    tone(N[n[1]],start+n[0]*EIGHTH,EIGHTH*1.3,0.28,'sine');
+    tone(N[n[1]]*2,start+n[0]*EIGHTH,EIGHTH*1.3,0.05,'sine');
+  });
+  bass.forEach(function(b){ tone(N[b[1]],start+b[0]*EIGHTH,b[2]*EIGHTH,0.2,'triangle'); });
+  bells.forEach(function(b){ tone(N[b[1]],start+b[0]*EIGHTH,b[2]*EIGHTH*2,0.14,'sine'); });
+}
+setInterval(function(){
+  if(!audioReady||!musicOn) return;
+  while(nextLoop<ac.currentTime+2){ scheduleLoop(nextLoop); nextLoop+=LOOP; }
+},300);
+function clickSound(){
+  if(!audioReady) return;
+  const t=ac.currentTime;
+  tone(1318.5,t,0.14,0.1,'sine',master);
+  tone(1975.5,t+0.05,0.18,0.05,'sine',master);
+}
+document.addEventListener('pointerdown',function once(){
+  initAudio();
+  if(ac.state==='suspended') ac.resume();
+  document.removeEventListener('pointerdown',once);
+});
+const soundBtn=document.getElementById('soundBtn');
+soundBtn.addEventListener('click',function(){
+  initAudio(); musicOn=!musicOn;
+  soundBtn.textContent=musicOn?'🔊':'🔇';
+  musicGain.gain.linearRampToValueAtTime(musicOn?0.15:0,ac.currentTime+0.4);
+});
+document.addEventListener('click',function(e){ if(e.target.closest('button')) clickSound(); });
+
+/* ============ СНЕГ ============ */
+const cv=document.getElementById('snow'), cx=cv.getContext('2d');
+let flakes=[];
+function sizeCanvas(){
+  cv.width=innerWidth; cv.height=innerHeight;
+  const count=Math.min(120,Math.floor(innerWidth/9));
+  flakes=Array.from({length:count},function(){
+    return {x:Math.random()*cv.width,y:Math.random()*cv.height,r:Math.random()*2.6+1,
+      s:Math.random()*0.7+0.3,w:Math.random()*Math.PI*2,sw:Math.random()*0.02+0.004};
+  });
+}
+sizeCanvas(); addEventListener('resize',sizeCanvas);
+(function snowLoop(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  cx.fillStyle='rgba(255,255,255,.75)';
+  flakes.forEach(function(f){
+    f.y+=f.s; f.w+=f.sw; f.x+=Math.sin(f.w)*0.6;
+    if(f.y>cv.height+5){f.y=-5;f.x=Math.random()*cv.width;}
+    cx.globalAlpha=0.35+f.r/8;
+    cx.beginPath(); cx.arc(f.x,f.y,f.r,0,7); cx.fill();
+  });
+  cx.globalAlpha=1;
+  requestAnimationFrame(snowLoop);
+})();
+
+/* ============ ЖИВОЙ СТИВ ============ */
+const steve=document.getElementById('steve');
+const sArmBack=steve.querySelector('.arm-back');
+const sArmFront=steve.querySelector('.arm-front');
+const sLegBack=steve.querySelector('.leg-back');
+const sLegFront=steve.querySelector('.leg-front');
+const sHead=steve.querySelector('.head');
+const sEyes=steve.querySelector('.eyes');
+const sPick=steve.querySelector('.pick');
+
+let sv={x:-140,vx:36,state:'walk',stateT:0,phase:0,flip:false,blink:0};
+
+function steveUpdate(dt){
+  sv.stateT-=dt;
+  if(sv.stateT<=0){
+    const r=Math.random();
+    if(sv.state==='walk'){
+      if(r<0.45){ sv.state='idle'; sv.stateT=2+Math.random()*3; }
+      else if(r<0.7){ sv.state='wave'; sv.stateT=2; }
+      else { sv.state='dig'; sv.stateT=2+Math.random()*2; }
+    }else{
+      sv.state='walk';
+      sv.stateT=4+Math.random()*5;
+      if(Math.random()<0.5){ sv.vx=Math.abs(sv.vx); sv.flip=false; }
+      else{ sv.vx=-Math.abs(sv.vx); sv.flip=true; }
+    }
+  }
+  if(sv.state==='walk'||sv.state==='dig'){
+    sv.x+=sv.vx*dt;
+    if(sv.x>innerWidth-120){ sv.vx=-Math.abs(sv.vx); sv.flip=true; }
+    if(sv.x<-160){ sv.vx=Math.abs(sv.vx); sv.flip=false; }
+  }
+  sv.phase+=dt*(sv.state==='walk'?9:0);
+
+  let armFront=0, armBack=0, legFront=0, legBack=0, head=0, pick=0;
+
+  if(sv.state==='walk'){
+    legFront=Math.sin(sv.phase)*24;
+    legBack=-Math.sin(sv.phase)*24;
+    armFront=-Math.sin(sv.phase)*22;
+    armBack=Math.sin(sv.phase)*22;
+    head=Math.sin(sv.phase*0.5)*3;
+  }else if(sv.state==='idle'){
+    head=Math.sin(sv.phase*0.8)*2;
+    armFront=Math.sin(sv.phase*0.6)*4;
+  }else if(sv.state==='wave'){
+    armFront=-40+Math.sin(sv.phase*6)*25;
+    head=-4;
+  }else if(sv.state==='dig'){
+    pick=-50+Math.abs(Math.sin(sv.phase*5))*70;
+    armBack=Math.sin(sv.phase*5)*20-10;
+    head=6;
+    legFront=Math.sin(sv.phase*5)*6;
+    legBack=-Math.sin(sv.phase*5)*6;
+  }
+  sv.blink-=dt;
+  let eyesOn=true;
+  if(sv.blink<-0.12){ sv.blink=2+Math.random()*3; eyesOn=true; }
+  if(sv.blink<0) eyesOn=false;
+  sEyes.style.opacity=eyesOn?'1':'0';
+
+  sArmFront.style.transform='rotate('+armFront+'deg)';
+  sArmBack.style.transform='rotate('+armBack+'deg)';
+  sLegFront.style.transform='rotate('+legFront+'deg)';
+  sLegBack.style.transform='rotate('+legBack+'deg)';
+  sHead.style.transform='rotate('+head+'deg)';
+  sPick.style.transform='rotate('+pick+'deg)';
+
+  steve.style.left=sv.x+'px';
+  steve.classList.toggle('flip',sv.flip);
+}
+let lastT=performance.now();
+(function steveLoop(t){
+  const dt=Math.min((t-lastT)/1000,0.05);
+  lastT=t;
+  steveUpdate(dt);
+  requestAnimationFrame(steveLoop);
+})(lastT);
+
+/* ============ ЗАГРУЗКА → АВТОРИЗАЦИЯ ============ */
+setTimeout(function(){
+  document.getElementById('loader').classList.add('hide');
+  const saved=currentUser();
+  if(saved && store.get('sc_users','{}')[saved]){ showUser(saved); }
+  else{ setTimeout(openAuth,300); }
+},2100);
+
+/* ============ ПЕРЕХОД СТРАНИЦ ============ */
+let current='home';
+function go(page){
+  if(page===current) return;
+  document.querySelectorAll('.navlink').forEach(function(b){
+    b.classList.toggle('active',b.dataset.page===page);
+  });
+  const cur=document.getElementById('page-'+current);
+  const next=document.getElementById('page-'+page);
+  cur.classList.add('exit');
+  setTimeout(function(){
+    cur.classList.remove('active','exit');
+    next.classList.add('active','enter');
+    window.scrollTo({top:0});
+    setTimeout(function(){ next.classList.remove('enter'); },650);
+  },430);
+  current=page;
+  document.getElementById('nav').classList.remove('open');
+}
+document.querySelectorAll('[data-go]').forEach(function(b){
+  b.addEventListener('click',function(){ go(b.dataset.go); });
+});
+document.querySelectorAll('.navlink').forEach(function(b){
+  b.addEventListener('click',function(){ go(b.dataset.page); });
+});
+
+/* ============ ШАПКА ============ */
+const header=document.getElementById('header'), restore=document.getElementById('headerRestore');
+document.getElementById('collapseBtn').addEventListener('click',function(){
+  header.classList.add('hidden'); restore.classList.add('show');
+});
+restore.addEventListener('click',function(){
+  header.classList.remove('hidden'); restore.classList.remove('show');
+});
+document.getElementById('burger').addEventListener('click',function(){
+  document.getElementById('nav').classList.toggle('open');
+});
+
+/* ============ КАРУСЕЛЬ ============ */
+const slides=document.getElementById('slides'), dots=document.getElementById('dots');
+let slideIdx=0;
+for(let i=0;i<3;i++){
+  const d=document.createElement('div'); d.className='dot'+(i===0?' on':'');
+  d.addEventListener('click',function(){ setSlide(i); });
+  dots.appendChild(d);
+}
+function setSlide(i){
+  slideIdx=i;
+  slides.style.transform='translateX(-'+(i*100)+'%)';
+  dots.querySelectorAll('.dot').forEach(function(d,j){ d.classList.toggle('on',j===i); });
+}
+setInterval(function(){ setSlide((slideIdx+1)%3); },4000);
+
+/* ============ КОНСТРУКТОР БАННЕРОВ ============ */
+const bTitle=document.getElementById('bTitle'), bSub=document.getElementById('bSub'),
+      bBg=document.getElementById('bBg'), bImg=document.getElementById('bImg'),
+      bPos=document.getElementById('bPos'), bStyle=document.getElementById('bStyle'),
+      bPrice=document.getElementById('bPrice'), bGrad=document.getElementById('bGrad'),
+      gradHint=document.getElementById('gradHint'), colorRow=document.getElementById('colorRow'),
+      bC1=document.getElementById('bC1'), bC2=document.getElementById('bC2'),
+      bDownload=document.getElementById('bDownload'),
+      prev=document.getElementById('bannerPrev');
+const bPhotoBg=document.getElementById('bPhotoBg'), bPhotoBgClear=document.getElementById('bPhotoBgClear');
+const bPhotoItem=document.getElementById('bPhotoItem'), bPhotoItemClear=document.getElementById('bPhotoItemClear');
+const prices={'classic':0,'style-3d':2000,'style-8d':4000,'style-16d':6000};
+const posNames={'pos-tl':'вверху слева','pos-tc':'вверху по центру','pos-tr':'вверху справа',
+  'pos-bl':'внизу слева','pos-bc':'внизу по центру','pos-br':'внизу справа'};
+let bgPhoto=null, itemPhoto=null;
+
+function loadPhoto(input,cb){
+  const file=input.files && input.files[0];
+  if(!file) return;
+  if(file.size>5*1024*1024){
+    document.getElementById('thanksTxt').textContent='Фото слишком большое (максимум 5 МБ). Попробуй другое 🙈';
+    openModal('thanksModal');
+    input.value='';
+    return;
+  }
+  const reader=new FileReader();
+  reader.onload=function(){ cb(reader.result); };
+  reader.readAsDataURL(file);
+}
+bPhotoBg.addEventListener('change',function(){ loadPhoto(bPhotoBg,function(d){ bgPhoto=d; updateBanner(); }); });
+bPhotoBgClear.addEventListener('click',function(){ bgPhoto=null; bPhotoBg.value=''; updateBanner(); });
+bPhotoItem.addEventListener('change',function(){ loadPhoto(bPhotoItem,function(d){ itemPhoto=d; updateBanner(); }); });
+bPhotoItemClear.addEventListener('click',function(){ itemPhoto=null; bPhotoItem.value=''; updateBanner(); });
+
+function updateBanner(){
+  const deco=prev.querySelector('.deco');
+  const h3=prev.querySelector('h3');
+  const pEl=prev.querySelector('p');
+  if(bgPhoto){
+    prev.style.background='#000 url('+bgPhoto+') center/cover no-repeat';
+  }else{
+    let bg=bBg.value;
+    if(bg==='custom') bg='linear-gradient(135deg,'+bC1.value+','+bC2.value+')';
+    prev.style.background=bg;
+  }
+  if(itemPhoto){
+    deco.innerHTML='<img class="deco-img" src="'+itemPhoto+'" alt="предмет">';
+  }else{
+    deco.textContent=bImg.value;
+  }
+  deco.classList.remove('pos-tl','pos-tc','pos-tr','pos-bl','pos-bc','pos-br');
+  deco.classList.add(bPos.value);
+  h3.textContent=bTitle.value||'Твой баннер';
+  pEl.textContent=bSub.value;
+  prev.classList.remove('style-3d','style-8d','style-16d');
+  if(bStyle.value!=='classic') prev.classList.add(bStyle.value);
+  bPrice.textContent='Цена: '+prices[bStyle.value].toLocaleString('ru-RU')+' ₽';
+  deco.classList.toggle('inside',bStyle.value==='classic');
+  const canGrad=(bStyle.value==='style-8d'||bStyle.value==='style-16d');
+  if(!canGrad){
+    bGrad.checked=false; bGrad.disabled=true;
+    gradHint.style.display='block';
+    h3.classList.remove('grad-text');
+  }else{
+    bGrad.disabled=false;
+    gradHint.style.display='none';
+    h3.classList.toggle('grad-text',bGrad.checked);
+  }
+  bDownload.disabled=(bStyle.value!=='classic');
+}
+[bTitle,bSub,bImg,bPos,bStyle].forEach(function(el){ el.addEventListener('input',updateBanner); });
+bBg.addEventListener('change',function(){
+  colorRow.style.display=(bBg.value==='custom')?'flex':'none';
+  updateBanner();
+});
+[bC1,bC2].forEach(function(el){ el.addEventListener('input',updateBanner); });
+bGrad.addEventListener('change',updateBanner);
+updateBanner();
+
+/* Скачивание бесплатного баннера в PNG */
+bDownload.addEventListener('click',function(){
+  if(bStyle.value!=='classic') return;
+  const W=1200, H=500;
+  const cnv=document.createElement('canvas');
+  cnv.width=W; cnv.height=H;
+  const c=cnv.getContext('2d');
+  function draw(){
+    if(bgPhoto){
+      const im=new Image();
+      im.onload=function(){
+        const s=Math.max(W/im.width,H/im.height);
+        const w=im.width*s, h=im.height*s;
+        c.drawImage(im,(W-w)/2,(H-h)/2,w,h);
+        rest();
+      };
+      im.src=bgPhoto;
+    }else{
+      let g;
+      if(bBg.value==='custom'){
+        g=c.createLinearGradient(0,0,W,H);
+        g.addColorStop(0,bC1.value); g.addColorStop(1,bC2.value);
+      }else{
+        const m=bBg.value.match(/#([0-9a-f]{6}).*?(#([0-9a-f]{6}))/i);
+        g=c.createLinearGradient(0,0,W,H);
+        g.addColorStop(0,m?m[1]:'#2a1b5e');
+        g.addColorStop(1,m?m[2]:'#7a3bd8');
+      }
+      c.fillStyle=g; c.fillRect(0,0,W,H);
+      rest();
+    }
+  }
+  function rest(){
+    const cxp=(bPos.value==='pos-tl'||bPos.value==='pos-bl')?90:(bPos.value==='pos-tc'||bPos.value==='pos-bc')?W/2:W-90;
+    const cyp=(bPos.value==='pos-tl'||bPos.value==='pos-tc'||bPos.value==='pos-tr')?90:H-90;
+    if(itemPhoto){
+      const im=new Image();
+      im.onload=function(){
+        c.save();
+        c.beginPath(); c.arc(cxp,cyp,60,0,Math.PI*2); c.clip();
+        c.drawImage(im,cxp-60,cyp-60,120,120);
+        c.restore();
+        c.lineWidth=6; c.strokeStyle='rgba(255,255,255,.5)';
+        c.beginPath(); c.arc(cxp,cyp,60,0,Math.PI*2); c.stroke();
+        finish();
+      };
+      im.src=itemPhoto;
+    }else{
+      c.font='110px serif';
+      c.textAlign='center'; c.textBaseline='middle';
+      c.fillText(bImg.value,cxp,cyp);
+      finish();
+    }
+  }
+  function finish(){
+    c.textAlign='center'; c.textBaseline='alphabetic';
+    c.fillStyle='#fff';
+    c.font='800 72px "Segoe UI",sans-serif';
+    c.fillText(bTitle.value||'Твой баннер',W/2,H/2-10);
+    c.font='400 34px "Segoe UI",sans-serif';
+    c.fillStyle='rgba(255,255,255,.92)';
+    c.fillText(bSub.value||'',W/2,H/2+52);
+    c.font='600 20px "Segoe UI",sans-serif';
+    c.fillStyle='rgba(255,255,255,.65)';
+    c.fillText('SnowCode ❄️',W/2,H-24);
+    const a=document.createElement('a');
+    a.download='banner-snowcode.png';
+    a.href=cnv.toDataURL('image/png');
+    a.click();
+    document.getElementById('thanksTxt').textContent='Баннер скачан! Пользуйся на здоровье 🎄';
+    openModal('thanksModal');
+    fireworks();
+  }
+  draw();
+});
+
+document.getElementById('bBuy').addEventListener('click',function(){
+  const details='Текст: '+(bTitle.value||'—')+' / '+(bSub.value||'—')
+    +', фон: '+(bgPhoto?'своё фото':(bBg.value==='custom'?'свой ('+bC1.value+' → '+bC2.value+')':bBg.options[bBg.selectedIndex].text))
+    +', предмет: '+(itemPhoto?'своё фото':bImg.value)+' '+posNames[bPos.value]
+    +(bGrad.checked?', переливающийся текст':'');
+  openBuy('Баннер ('+bStyle.options[bStyle.selectedIndex].text+')', bPrice.textContent.replace('Цена: ',''), details);
+});
+
+/* ============ КОНСТРУКТОР САЙТА ============ */
+const sName=document.getElementById('sName'), sType=document.getElementById('sType'),
+      sTheme=document.getElementById('sTheme'), sSlogan=document.getElementById('sSlogan'),
+      sPrice=document.getElementById('sPrice'), sitePrev=document.getElementById('sitePrev');
+const sitePrices={'Визитка':2000,'Портфолио':3000,'Интернет-магазин':5000};
+function updateSite(){
+  const parts=sTheme.value.split('|');
+  sitePrev.querySelector('.sp-head').style.background=parts[0];
+  sitePrev.querySelector('#spName').textContent=sName.value||'Мой первый сайт';
+  sitePrev.querySelector('#spSlogan').textContent=sSlogan.value||'Добро пожаловать!';
+  const body=sitePrev.querySelector('.sp-body');
+  let blocks=[];
+  if(sType.value==='Визитка'){
+    blocks=['📄 О нас — короткий рассказ о тебе','📞 Контакты — как связаться'];
+  }else if(sType.value==='Портфолио'){
+    blocks=['🖼️ Галерея — лучшие работы','🏆 Достижения — чем можешь гордиться','📞 Контакты — как связаться'];
+  }else{
+    blocks=['🛒 Каталог товаров','🛍️ Корзина и оформление заказа','🚚 Доставка и оплата','📞 Поддержка 24/7'];
+  }
+  body.innerHTML=blocks.map(function(b){ return '<div class="sp-block">'+b+'</div>'; }).join('')
+    +'<span class="sp-btn" id="spBtn">Написать нам ✉️</span>';
+  sitePrev.querySelector('#spBtn').style.background=parts[1];
+  sPrice.textContent='Цена: '+sitePrices[sType.value].toLocaleString('ru-RU')+' ₽';
+}
+[sName,sType,sTheme,sSlogan].forEach(function(el){ el.addEventListener('input',updateSite); });
+updateSite();
+document.getElementById('sBuy').addEventListener('click',function(){
+  const details='Тип: '+sType.value+', название: '+(sName.value||'—')
+    +', тема: '+sTheme.options[sTheme.selectedIndex].text
+    +', слоган: '+(sSlogan.value||'—')+', статус: бета';
+  openBuy('Конструктор сайта — '+sType.value, sPrice.textContent.replace('Цена: ',''), details);
+});
+
+/* ============ МОДАЛКИ ============ */
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('[data-close]').forEach(function(b){
+  b.addEventListener('click',function(){ closeModal(b.closest('.modal').id); });
+});
+document.querySelectorAll('.modal').forEach(function(m){
+  m.addEventListener('click',function(e){ if(e.target===m) m.classList.remove('open'); });
+});
+
+/* ============ ПОКУПКА ============ */
+let buyService='';
+function openBuy(service,price,comment){
+  buyService=service;
+  document.getElementById('buyInfo').textContent=service+' — '+price;
+  document.getElementById('buyComment').value=comment||'';
+  const nickBlock=document.getElementById('nickBlock');
+  const asUserBlock=document.getElementById('asUserBlock');
+  if(isRegistered()){
+    nickBlock.style.display='none';
+    asUserBlock.style.display='block';
+    document.getElementById('buyAsName').textContent=currentUser();
+  }else{
+    nickBlock.style.display='block';
+    asUserBlock.style.display='none';
+    document.getElementById('buyName').value='';
+  }
+  openModal('buyModal');
+}
+document.querySelectorAll('[data-buy]').forEach(function(b){
+  b.addEventListener('click',function(){ openBuy(b.dataset.buy,b.dataset.price,''); });
+});
+document.getElementById('buySubmit').addEventListener('click',async function(){
+  const user=currentUser();
+  let name;
+  if(isRegistered()){ name=user; }
+  else{
+    const nameEl=document.getElementById('buyName');
+    name=nameEl.value.trim();
+    if(!name){ nameEl.focus(); return; }
+    store.setRaw('sc_current',name);
+  }
+  const contact=document.getElementById('buyContact').value.trim()||'не указан';
+  const comment=document.getElementById('buyComment').value.trim()||'—';
+  const info=document.getElementById('buyInfo').textContent;
+  const price=info.split('— ')[1]||info;
+  const btn=this;
+  btn.disabled=true; btn.textContent='Отправляем…';
+  const msg='🎁 НОВЫЙ ЗАКАЗ SnowCode\n\n'
+    +'Услуга: '+buyService+'\nЦена: '+price+'\nНик: '+name+'\n'
+    +'Контакт: '+contact+'\nДетали: '+comment+'\n'
+    +'Время: '+new Date().toLocaleString('ru-RU');
+  await sendToTelegram(msg);
+  const orders=store.get('sc_orders','[]');
+  orders.unshift({service:buyService,price:price,name:name,contact:contact,comment:comment,date:new Date().toLocaleString('ru-RU')});
+  store.set('sc_orders',orders);
+  btn.disabled=false; btn.textContent='Заказать ✉️';
+  closeModal('buyModal');
+  document.getElementById('buyContact').value='';
+  document.getElementById('buyComment').value='';
+  document.getElementById('thanksTxt').textContent=name+', заказ «'+buyService+'» принят! Мы свяжемся с тобой в ближайшее время 🎅';
+  openModal('thanksModal');
+  fireworks();
+});
+
+/* ============ ОТЗЫВЫ ============ */
+let revService='', revStars=0;
+document.querySelectorAll('[data-review]').forEach(function(b){
+  b.addEventListener('click',function(){
+    revService=b.dataset.review;
+    document.getElementById('reviewFor').textContent='Услуга: '+revService;
+    if(isRegistered()) document.getElementById('revName').value=currentUser();
+    openModal('reviewModal');
+  });
+});
+const stars=document.getElementById('stars');
+stars.querySelectorAll('span').forEach(function(s,i){
+  s.addEventListener('click',function(){
+    revStars=i+1;
+    stars.querySelectorAll('span').forEach(function(x,j){ x.classList.toggle('on',j<=i); });
+  });
+});
+document.getElementById('revSubmit').addEventListener('click',async function(){
+  const nameEl=document.getElementById('revName');
+  const name=nameEl.value.trim();
+  const text=document.getElementById('revText').value.trim();
+  if(!name||!revStars){ if(!name) nameEl.focus(); return; }
+  const btn=this;
+  btn.disabled=true; btn.textContent='Отправляем…';
+  const msg='⭐ НОВЫЙ ОТЗЫВ SnowCode\n\n'
+    +'Услуга: '+revService+'\nОценка: '+'⭐'.repeat(revStars)+' ('+revStars+'/5)\n'
+    +'Имя: '+name+'\nОтзыв: '+(text||'Всё супер!')+'\n'
+    +'Время: '+new Date().toLocaleString('ru-RU');
+  await sendToTelegram(msg);
+  const list=store.get('sc_reviews','[]');
+  list.unshift({service:revService,stars:revStars,name:name,text:text||'Всё супер!',date:new Date().toLocaleDateString('ru-RU')});
+  store.set('sc_reviews',list);
+  btn.disabled=false; btn.textContent='Отправить отзыв';
+  closeModal('reviewModal');
+  document.getElementById('revText').value='';
+  revStars=0;
+  stars.querySelectorAll('span').forEach(function(x){ x.classList.remove('on'); });
+  document.getElementById('thanksTxt').textContent=name+', спасибо за отзыв! Ты сделал наш день чуть волшебнее ⭐';
+  openModal('thanksModal');
+  renderReviews();
+  fireworks();
+});
+function renderReviews(){
+  const list=store.get('sc_reviews','[]');
+  const box=document.getElementById('reviewList');
+  if(!list.length){
+    box.innerHTML='<p class="muted" style="margin-top:16px">Пока отзывов нет — стань первым! 🎄</p>';
+    return;
+  }
+  box.innerHTML=list.map(function(r){
+    return '<div class="review"><div class="stars">'+'⭐'.repeat(r.stars)+'</div>'+
+      '<div class="who">'+r.name+' · '+r.service+' · '+r.date+'</div>'+
+      '<div class="txt">'+r.text+'</div></div>';
+  }).join('');
+}
+renderReviews();
+
+/* ============ ФЕЙЕРВЕРК ============ */
+function fireworks(){
+  const cxp=innerWidth/2, cyp=innerHeight/2;
+  const emojis=['❄️','⭐','✨','🎉'];
+  for(let i=0;i<22;i++){
+    const el=document.createElement('span');
+    el.className='flake-fly';
+    el.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+    el.style.left=cxp+'px'; el.style.top=cyp+'px';
+    const ang=Math.random()*Math.PI*2, dist=80+Math.random()*220;
+    el.style.setProperty('--dx',Math.cos(ang)*dist+'px');
+    el.style.setProperty('--dy',Math.sin(ang)*dist+'px');
+    el.style.fontSize=(14+Math.random()*22)+'px';
+    document.body.appendChild(el);
+    setTimeout(function(){ el.remove(); },1300);
+  }
+}
+</script>
+</body>
+</html>
